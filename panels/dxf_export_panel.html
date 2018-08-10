@@ -1,0 +1,41 @@
+<form role="form" onsubmit="event.preventDefault(); return false;">
+    <!-- fieldset cose generali stampa -->
+    <!--<div class="form-group">
+        <label for="export_panel_text">Testo</label>
+        <textarea name="text" class="form-control" id="export_panel_text"></textarea>
+    </div>-->
+    <!--<div class="form-group">
+        <label for="export_panel_date">Data</label>
+        <input type="date" name="date" class="form-control" id="export_panel_date">
+    </div>-->
+    <!-- fieldset proprietà di stampa -->
+	
+    <div class="form-group">
+		<input type="hidden" name="hdnExportDxfUrl" id="hdnExportDxfUrl" />
+		<!-- indicare tutte le coppie di mapset/temi separate da virgola nel campo value -->
+        <label for="export_panel_themes">Temi da esportare</label><br />
+        <input type="checkbox" id="themes" name="themes" class="themes" value="mappa_basi_cartografiche,base_btu" checked> Base BTU<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_basi_cartografiche,base_dbt"> Base DBT<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_gas,gas"> Gas<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_gas_pronto_intervento,gas_pronto_intervento"> GAS - Pronto intervento<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_acqua,acqua"> Acqua<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_fognatura,fognature"> Fognature<br />
+		<input type="checkbox" id="themes" name="themes" class="themes" value="mappa_teleriscaldamento,teleriscaldamento"> Teleriscaldamento<br />
+			
+    </div>
+
+	<div class="form-group">
+       Area massima esportabile: <span id="exportMaxAreaSize"></span><br />
+	   Area selezionata:  <span id="exportAreaSize"></span>
+    </div>
+	
+    <div class="form-group">
+	    <a href="#" id="btnExportDxf" role="export" class="btn btn-default" target="_blank">Scarica DXF</a>
+   </div>
+    
+    <div class="results" style="display: none;">
+        <span name="result">
+        </span>
+    </div>
+    
+</form>
