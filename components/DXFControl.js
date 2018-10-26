@@ -42,10 +42,41 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
             eventListeners: {
                 'panelready': function(event) {
                     var me = this, timerid;
+                    var tmpTheme = '';
+                    for (var i = 0; i < this.map.config.layers.length; i++) {
+                        var cfgLayer = this.map.config.layers[i];
+                        if (cfgLayer.typeId == 4 || cfgLayer.typeId == 5 || cfgLayer.typeId == 7 || cfgLayer.typeId == 8)
+                            continue;
+                        if (typeof(cfgLayer.options) !== 'undefined') {
+                            var layerOpts = cfgLayer.options;
+                        }
+                        else {
+                            var layerOpts = cfgLayer.parameters;
+                        }
+                        if (layerOpts.theme_id != tmpTheme) {
+                            var container = $('#dxfexport_themes_group');
+                            var inputs = container.find('input');
+                            var id = inputs.length+1;
+                            var name = this.map.config.mapsetName + ',' + layerOpts.theme_id;
+                            $('<input />', { type: 'checkbox', id: 'dxfexport_theme_'+id, class: 'dxfexport_themes', value: name }).appendTo(container);
+                            $('<label />', { 'for': 'dxfexport_theme_'+id, text: layerOpts.theme }).appendTo(container);
+                            if ($.mobile) {
+                                $('#dxfexport_theme_'+id).checkboxradio();
+                            }
+                            else {
+                                container.append('<br>');
+                            }
+                            tmpTheme = layerOpts.theme_id;
+                        }
+                    }
+                    if ($.mobile)
+                        $('.dxfexport_themes').first().prop('checked', true).checkboxradio("refresh");
+                    else
+                        $('.dxfexport_themes').first().prop('checked', true);
 					$("#exportAreaSize").html((this.initialBBEdge * this.initialBBEdge) + " mq");
 					$("#exportMaxAreaSize").html(this.maxArea + " mq");
 					$("#exportMaxAreaSize").html(this.maxArea + " mq");
-                    $('.themes').on('change', function(event) {
+                    $('.dxfexport_themes').on('change', function(event) {
                         event.preventDefault();
                         //$('#'+me.formId+' a[role="pdf"], #exportpanel a[role="html"]').attr('href', '#');
                         //$('#'+me.formId+' span[role="icon"]').removeClass('glyphicon-white').addClass('glyphicon-disabled');

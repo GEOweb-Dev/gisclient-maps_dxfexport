@@ -244,11 +244,11 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		params = {};
 		params.project = "geoweb_iren";
 		//params.mapset = "mappa_basi_cartografiche";
-		var mapSetThemes = $('#themes:checked').map(function() {return this.value;}).get().join(';');
+		var mapSetThemes = $('.dxfexport_themes:checked').map(function() {return this.value;}).get().join(';');
 		if(!mapSetThemes){
 			alert("Selezionare almeno un tema.");
 			//seleziono il primo tema
-			$('#themes').first().prop('checked', true);
+			$('.dxfexport_themes').first().prop('checked', true);
 			return;
 		}
 		//ricavo i temi/mapset
