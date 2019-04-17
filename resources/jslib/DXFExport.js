@@ -243,7 +243,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		params["extent"] = [center.lon-width/2,center.lat-height/2,center.lon+width/2,center.lat+height/2].join(",");
 		params = {};
 		params.project = "geoweb_iren";
-		//params.mapset = "mappa_basi_cartografiche";
 		var mapSetThemes = $('.dxfexport_themes:checked').map(function() {return this.value;}).get().join(';');
 		if(!mapSetThemes){
 			alert("Selezionare almeno un tema.");
@@ -258,7 +257,9 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		for(var i = 0; i < mapSetThemes.length; i++){
 				var mapSetTheme = mapSetThemes[i].split(',');
 				mapSet.push(mapSetTheme[0]);
-				themes.push(mapSetTheme[1]);
+				for(var k = 1; k < mapSetTheme.length; k++){		
+					themes.push(mapSetTheme[k]);
+				}
 		}
 		//setto i parametri
 		params.themes = themes.join();

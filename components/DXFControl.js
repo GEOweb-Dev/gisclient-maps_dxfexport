@@ -23,7 +23,6 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
                     {
                         this.activate();
                         var me = this;
-						debugger
                         if($.trim($('#exportpanel').html()) == '') {
 							var rnd = Math.floor((Math.random() * 100000) + 1); //rimozione manuale della cache
                             $("#exportpanel").load('../../panels/export_panel.html?' + rnd, function() {
@@ -42,7 +41,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
             eventListeners: {
                 'panelready': function(event) {
                     var me = this, timerid;
-                    var tmpTheme = '';
+                    var themeList = []; //contiene gli elementi che genereranno gli input
                     for (var i = 0; i < this.map.config.layers.length; i++) {
                         var cfgLayer = this.map.config.layers[i];
                         if (cfgLayer.typeId == 4 || cfgLayer.typeId == 5 || cfgLayer.typeId == 7 || cfgLayer.typeId == 8)
@@ -53,22 +52,35 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
                         else {
                             var layerOpts = cfgLayer.parameters;
                         }
-                        if (layerOpts.theme_id != tmpTheme) {
-                            var container = $('#dxfexport_themes_group');
-                            var inputs = container.find('input');
-                            var id = inputs.length+1;
-                            var name = this.map.config.mapsetName + ',' + layerOpts.theme_id;
-                            $('<input />', { type: 'checkbox', id: 'dxfexport_theme_'+id, class: 'dxfexport_themes', value: name }).appendTo(container);
-                            $('<label />', { 'for': 'dxfexport_theme_'+id, text: layerOpts.theme }).appendTo(container);
-                            if ($.mobile) {
-                                $('#dxfexport_theme_'+id).checkboxradio();
-                            }
-                            else {
-                                container.append('<br>');
-                            }
-                            tmpTheme = layerOpts.theme_id;
-                        }
+						var theme = themeList.find(t => t.themeLabel == layerOpts.theme);
+                        if (!theme) {
+							var theme = {};
+							theme.themeLabel = layerOpts.theme;
+							theme.themeIds = [];
+							theme.themeIds.push(layerOpts.theme_id);
+                            theme.mapsetName = this.map.config.mapsetName;
+                            themeList.push(theme);
+                        }else{
+							if(!theme.themeIds.includes(layerOpts.theme_id)){
+								theme.themeIds.push(layerOpts.theme_id);
+							}
+						}
                     }
+					var container = $('#dxfexport_themes_group');
+                    var inputs = container.find('input');
+					var id = inputs.length + 1;
+					themeList.forEach(function(element) {
+						$('<input />', { type: 'checkbox', id: 'dxfexport_theme_'+id, class: 'dxfexport_themes', value: theme.mapsetName + ',' + element.themeIds.join(',') }).appendTo(container);
+						$('<label />', { 'for': 'dxfexport_theme_'+id, text: element.themeLabel }).appendTo(container);
+						if ($.mobile) {
+							$('#dxfexport_theme_'+id).checkboxradio();
+						}
+						else {
+							container.append('<br>');
+						}
+						id++;
+					});					
+										
                     if ($.mobile)
                         $('.dxfexport_themes').first().prop('checked', true).checkboxradio("refresh");
                     else
@@ -129,7 +141,6 @@ window.GCComponents["SideToolbar.Buttons"].addButton (
     function() {
         if (sidebarPanel.handleEvent || typeof(sidebarPanel.handleEvent) === 'undefined')
         {
-			debugger
             var ctrlDXFExport = this.map.getControlsBy('gc_id', 'control-dxfexport')[0];
 
             if (ctrlDXFExport.active) {
