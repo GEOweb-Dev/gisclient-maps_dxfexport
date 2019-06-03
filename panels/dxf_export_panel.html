@@ -1,3 +1,16 @@
+<style>
+.dxfInput{
+	color:black;
+}
+.dxfFieldset{
+
+}
+.dxfFieldset legend{
+	font-size:medium;
+	color: white;
+	font-weight: bold;
+}
+</style>
 <form role="form" onsubmit="event.preventDefault(); return false;">
     <!-- fieldset cose generali stampa -->
     <!--<div class="form-group">
@@ -20,6 +33,19 @@
        Area massima esportabile: <span id="exportMaxAreaSize"></span><br />
 	   Area selezionata:  <span id="exportAreaSize"></span>
     </div>
+	
+	<fieldset class="dxfFieldset">
+		<legend>Impostazioni avanzate</legend>
+			<input type="checkbox" value="1" name="enableSingleLayerBlock" id="enableSingleLayerBlock" /> <label for="enableSingleLayerBlock" >Disegna blocchi in un unico layer</label><br/>
+			<input type="checkbox" value="1" name="enableColors" id="enableColors" /> <label for="enableColors" >Forza colori DA Layer</label><br/>
+			<input type="checkbox" value="1" name="enableLineThickness" id="enableLineThickness" /> <label for="enableLineThickness" >Disabilita larghezza linee</label><br/>
+			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="textScaleMultiplier" id="textScaleMultiplier" class="dxfInput"/> <label for="textScaleMultiplier" >Moltiplicatore testi</label><br/>
+			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="labelScaleMultiplier" id="labelScaleMultiplier" class="dxfInput" /> <label for="labelScaleMultiplier" >Moltiplicatore etichette</label><br/>
+			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="insertScaleMultiplier" id="insertScaleMultiplier" class="dxfInput" /> <label for="insertScaleMultiplier" >Moltiplicatore blocchi</label><br/>
+			
+		</div>
+	</fieldset>
+	
 
     <div class="form-group">
 	    <a href="#" id="btnExportDxf" role="export" class="btn btn-default" target="_blank">Scarica DXF</a>

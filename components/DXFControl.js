@@ -103,6 +103,28 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
 						me.downloadDXF();
 						return false;
 					});
+					
+					//eventi per le opzioni avanzate
+					$( "#enableSingleLayerBlock" ).change(function() {
+						me.updateUrl();
+						console.log("enableSingleLayerBlock")
+					});
+					$( "#enableColors" ).change(function() {
+						me.updateUrl();
+					});
+					$( "#enableLineThickness" ).change(function() {
+						me.updateUrl();
+					});
+					$( "#textScaleMultiplier" ).change(function() {
+						me.updateUrl();
+					});
+					$( "#labelScaleMultiplier" ).change(function() {
+						me.updateUrl();
+					});
+					$( "#insertScaleMultiplier" ).change(function() {
+						me.updateUrl();
+					});
+					
                 },
                 'deactivate' : function(event) {
                     sidebarPanel.hide('exportpanel');

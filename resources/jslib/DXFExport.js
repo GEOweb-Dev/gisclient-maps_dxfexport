@@ -28,64 +28,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
     initialize: function(options) {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
-
-    /*doExport: function() {
-
-        var me = this;
-        var params = me.getParams();
-        //params["tiles"] = me.getTiles();
-        //params["format"] = me.printFormat;
-        var bounds = me.exportBox.geometry.getBounds().clone();;
-        if (this.map.displayProjection && this.map.displayProjection != this.map.projection) {
-            var projCOK = new OpenLayers.Projection(this.map.displayProjection);
-            bounds.transform(this.map.getProjectionObject(), projCOK);
-        }
-
-        var center = bounds.getCenterLonLat();
-
-        var width = bounds.getWidth();
-        var height = bounds.getHeight();
-
-        params["center"] = [center.lon, center.lat];
-        params["extent"] = [center.lon-width/2,center.lat-height/2,center.lon+width/2,center.lat+height/2].join(",");
-		params = {};
-		params.project = "geoweb_iren";
-		params.mapset = "mappa_basi_cartografiche";
-		themes = $('#themes:checked').map(function() {return this.value;}).get().join(',');
-		params.themes = themes;
-		params.epsg = "25832";
-		params.template = "template_dbt.dxf";
-		params.miny = center.lat-height/2;
-		params.maxy = center.lat+height/2;
-		params.minx = center.lon-width/2;
-		params.maxx = center.lon+width/2;
-
-        if(me.loadingControl) me.loadingControl.maximizeControl();
-
-         $.ajax({
-            url: me.baseUrl + 'services/gcExportService.php',
-            type: 'GET',
-            data: params,
-            //dataType: 'json',
-			timeout: 300000,
-            success: function(response) {
-
-                //f(typeof(response.result) != 'undefined' && response.result == 'ok') {
-                //    me.events.triggerEvent("exported", response);
-                //}
-                //else {
-                //    alert(OpenLayers.i18n('Error'));
-                //}
-                if(me.loadingControl) me.loadingControl.minimizeControl();
-            },
-            error: function() {
-
-                alert(OpenLayers.i18n('Error'));
-                if(me.loadingControl) me.loadingControl.minimizeControl();
-            }
-        });
-    },*/
-
     setMap: function(map) {
         //si pu� spostare in initialize quando togliamo i parametri che dipendono da map
         var me = this;
@@ -106,7 +48,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 
 		//controllo per nascondere il bottone
 		map.events.register('zoomend', null, function(){
-
 			var zoom = map.getZoom();
 			if(!sidebarPanel.isOpened){
 				if(zoom >= 9){
@@ -117,41 +58,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 				}
 			}
 		});
-
-		/*
-		Elencare i temi disponibili
-        var params = this.getParams();
-        params.request_type = 'get-box';
-        $.ajax({
-            url: me.baseUrl + '/services/gcExportService.php',
-            jsonpCallback: "callback",
-            async: false,
-            type: 'POST',
-            dataType: 'jsonp',
-            data: params,
-            success: function(response) {
-
-                if(typeof(response) != 'object' || response == null || typeof(response.result) != 'string' || response.result != 'ok' || typeof(response.pages) != 'object') {
-
-					return alert(OpenLayers.i18n('System error'));
-                }
-                me.pages = response.pages;
-
-                if (!me.eventListeners.deactivate)
-                    me.events.register('deactivate', me, me.removeExportBox);
-                if (!me.eventListeners.activate)
-                    me.events.register('activate', me, me.drawExportBox);
-                //me.drawExportBox.apply(me);
-                me.events.triggerEvent("updateboxInfo");
-
-            },
-            error: function() {
-
-                return alert(OpenLayers.i18n('System error'));
-            }
-        });
-		*/
-
     },
 
     getParams: function() {
@@ -270,6 +176,21 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		params.maxy = center.lat+height/2;
 		params.minx = center.lon-width/2;
 		params.maxx = center.lon+width/2;
+		
+		//parametri avanzati
+		params.enableSingleLayerBlock = document.getElementById('enableSingleLayerBlock').checked ? 1 : 0;
+		params.enableColors = document.getElementById('enableColors').checked ? 1 : 0;
+		params.enableLineThickness =  document.getElementById('enableLineThickness').checked ? 1 : 0;
+		var textScaleMultiplier = document.getElementById('textScaleMultiplier');
+		if(textScaleMultiplier.value)
+			params.textScaleMultiplier = textScaleMultiplier.value;
+		var labelScaleMultiplier = document.getElementById('labelScaleMultiplier');
+		if(labelScaleMultiplier.value)
+			params.labelScaleMultiplier = labelScaleMultiplier.value;
+		var insertScaleMultiplier = document.getElementById('insertScaleMultiplier');
+		if(insertScaleMultiplier.value)
+			params.insertScaleMultiplier = insertScaleMultiplier.value;
+		
 		//Aggiorno il link per il download
 		var url = clientConfig.DXF_SERVICE_URL + 'services/plugins/dxfexport/gcExportService.php?' + $.param(params);
 		$("#hdnExportDxfUrl").val(url);
@@ -300,36 +221,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         var centerHPix = parseInt((this.map.size.h)/2);
         var ct = this.map.getLonLatFromPixel(new OpenLayers.Pixel(centerWPix, centerHPix));
         var bounds = new OpenLayers.Bounds(ct.lon - (boxW/2), ct.lat - (boxH/2), ct.lon + (boxW/2), ct.lat + (boxW/2));
-
-        /*
-		var boundsScale;
-		if (this.map.displayProjection && this.map.displayProjection != this.map.projection) {
-            var projCOK = new OpenLayers.Projection(this.map.displayProjection);
-            bounds.transform(this.map.getProjectionObject(), projCOK);
-            boundsScale = this.roundScale(Math.abs(bounds.right - bounds.left)/pageW*100);
-            var center = bounds.getCenterLonLat();
-            bounds = new OpenLayers.Bounds(center.lon - pageW*boundsScale/200, center.lat - pageH*boundsScale/200, center.lon + pageW*boundsScale/200,  center.lat + pageH*boundsScale/200);
-            bounds.transform(projCOK, this.map.getProjectionObject());
-        }
-        else {
-            boundsScale = this.roundScale(Math.abs(lb.lon-rt.lon)/pageW*100);
-        }
-
-        //Se ho impostato la scala prima della chiamata scalo il box
-        if(this.boxScale && this.maxScale){
-            this.boxScale = Math.min(this.boxScale, this.maxScale);
-        }
-        else if(this.maxScale && this.maxScale < boundsScale){
-            this.boxScale = this.maxScale;
-        }
-
-        if(this.boxScale){
-            bounds = bounds.scale(this.boxScale/boundsScale);
-        }
-        else{
-            this.boxScale = boundsScale;
-        }
-		*/
+		
         this.geometryBox = bounds.toGeometry();
         this.originalBounds = bounds.clone();
         this.exportBox = new OpenLayers.Feature.Vector(bounds.toGeometry());
@@ -355,44 +247,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 
 
     },
-
-    /*updateExportBox: function(){
-
-        //se cambio le dimensioni voglio comunque mantenere la scala di stampa!!!
-        //non ruoto semplicemente il box perch� le dimensioni potrebbero essere diverse per il template di stampa
-
-        var pageSize=this.pages[this.pageLayout][this.pageFormat];
-        var pageW = parseFloat(pageSize.w);
-        var pageH = parseFloat(pageSize.h);
-        this.pageW = pageW;
-
-        var boxW = pageW*this.boxScale/100;
-        var boxH = pageH*this.boxScale/100;
-
-        var bounds = this.exportBox.geometry.getBounds();
-        var center = bounds.getCenterLonLat();
-        var newBounds;
-        if (this.map.displayProjection && this.map.displayProjection != this.map.projection) {
-            var projCOK = new OpenLayers.Projection(this.map.displayProjection);
-            center.transform(this.map.getProjectionObject(), projCOK);
-            newBounds = new OpenLayers.Bounds(center.lon - boxW/2, center.lat - boxH/2, center.lon + boxW/2,  center.lat + boxH/2);
-            newBounds.transform(projCOK, this.map.getProjectionObject());
-        }
-        else {
-            newBounds = new OpenLayers.Bounds(center.lon - boxW/2, center.lat - boxH/2, center.lon + boxW/2,  center.lat + boxH/2);
-        }
-
-        //????????????????????????????????????????? non aggiorna
-        //BOH NON RIESCO A MODIFICARE LA FEATURE. QUINDI LA TOLGO E LA RIAGGIUNGO POI VEDIAMO
-        if (this.modifyControl)
-            if(this.modifyControl.feature)
-                this.modifyControl.unselectFeature(this.exportBox);
-        this.exportBox.destroy();
-        this.exportBox = new OpenLayers.Feature.Vector(newBounds.toGeometry());
-        this.layerbox.addFeatures(this.exportBox);
-        this.events.triggerEvent("updateboxInfo");
-
-    },*/
 
     moveExportBox: function(position){
         //if(!this.editMode) return;
