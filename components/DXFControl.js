@@ -107,7 +107,6 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
 					//eventi per le opzioni avanzate
 					$( "#enableSingleLayerBlock" ).change(function() {
 						me.updateUrl();
-						console.log("enableSingleLayerBlock")
 					});
 					$( "#enableColors" ).change(function() {
 						me.updateUrl();
@@ -124,7 +123,9 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
 					$( "#insertScaleMultiplier" ).change(function() {
 						me.updateUrl();
 					});
-					
+					$( "#textScaleMultiplier" ).val(1);
+					$( "#labelScaleMultiplier" ).val(1);
+					$( "#insertScaleMultiplier" ).val(1);
                 },
                 'deactivate' : function(event) {
                     sidebarPanel.hide('exportpanel');
