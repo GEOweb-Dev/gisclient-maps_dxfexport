@@ -10,3 +10,5 @@ clientConfig.DXF_MAX_AREA = 3000000;
 clientConfig.DXF_TEMPLATE = "template_dxf.dxf";
 //epsg per il download
 clientConfig.DXF_EPSG = "25832";
+//Temi selezionati di default tutto MINUSCOLO
+clientConfig.DXF_THEME_SELECTED = ["gas", "acqua", "fognature", "teleriscaldamento"];
