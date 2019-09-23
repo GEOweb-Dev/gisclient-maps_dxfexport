@@ -3,7 +3,7 @@ clientConfig.CLIENT_COMPONENTS.push("gisclient-maps_dxfexport:DXFControl:2:print
 //url per i servizi
 clientConfig.DXF_SERVICE_URL = clientConfig.GISCLIENT_URL + "/";
 //url per la pagina di download
-clientConfig.DXF_DOWNLOAD_URL = "http://172.16.5.72/gisclient3-f/services/plugins/dxfexport/dxfDownload.php?fileName=";
+clientConfig.DXF_DOWNLOAD_URL = clientConfig.GISCLIENT_URL + "/services/plugins/dxfexport/dxfDownload.php?fileName=";
 //area massima di download
 clientConfig.DXF_MAX_AREA = 3000000;
 //template standard
@@ -11,4 +11,4 @@ clientConfig.DXF_TEMPLATE = "template_dxf.dxf";
 //epsg per il download
 clientConfig.DXF_EPSG = "25832";
 //Temi selezionati di default tutto MINUSCOLO
-clientConfig.DXF_THEME_SELECTED = ["gas", "acqua", "fognature", "teleriscaldamento"];
+clientConfig.DXF_THEME_SELECTED = ["base btu", "gas", "acqua", "fognature", "teleriscaldamento"];
