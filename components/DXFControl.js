@@ -117,7 +117,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function(map){
 					});
 					
 					//eventi per le opzioni avanzate
-					$( "#enableSingleLayerBlock" ).change(function() {
+					$( "#enableTemplateLayer" ).change(function() {
 						me.updateUrl();
 					});
 					$( "#enableColors" ).change(function() {
