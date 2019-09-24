@@ -178,7 +178,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		params.maxx = center.lon+width/2;
 		
 		//parametri avanzati
-		params.enableSingleLayerBlock = document.getElementById('enableSingleLayerBlock').checked ? 1 : 0;
+		params.enableTemplateLayer = document.getElementById('enableTemplateLayer').checked ? 1 : 0;
 		params.enableColors = document.getElementById('enableColors').checked ? 0 : 1;
 		params.enableLineThickness =  document.getElementById('enableLineThickness').checked ? 0 : 1;
 		var textScaleMultiplier = document.getElementById('textScaleMultiplier');
