@@ -148,7 +148,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		params["center"] = [center.lon, center.lat];
 		params["extent"] = [center.lon-width/2,center.lat-height/2,center.lon+width/2,center.lat+height/2].join(",");
 		params = {};
-		params.project = "geoweb_iren";
+		params.project = GisClientMap.projectName;
 		var mapSetThemes = $('.dxfexport_themes:checked').map(function() {return this.value;}).get().join(';');
 		if(!mapSetThemes){
 			alert("Selezionare almeno un tema.");
