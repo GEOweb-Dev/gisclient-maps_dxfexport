@@ -12,3 +12,14 @@ clientConfig.DXF_TEMPLATE = "template_dxf.dxf";
 clientConfig.DXF_EPSG = "25832";
 //Temi selezionati di default tutto MINUSCOLO
 clientConfig.DXF_THEME_SELECTED = ["base btu", "gas", "acqua", "fognature", "teleriscaldamento"];
+//valori di default della UI in base al nome della mappa
+clientConfig.DXF_MAPSET_CONFIG = [
+	{
+		mapset:"mappa_teleriscaldamento",
+		config: {
+			textScaleMultiplier: 0.50,
+			labelScaleMultiplier: 0.50,
+			insertScaleMultiplier: 1,
+			enableTemplateLayerChecked: false
+		}
+	}
