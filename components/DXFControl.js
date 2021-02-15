@@ -107,7 +107,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 $("#map-select-scale").on('change', function (event) {
                     me.updateUrl();
                 });
-                me.updateUrl();
+                
                 $('#btnExportDxf').on('click', function (event) {
                     event.preventDefault();
                     me.downloadDXF();
@@ -145,6 +145,8 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 $("#labelScaleMultiplier").val(labelScaleMultiplier);
                 $("#insertScaleMultiplier").val(insertScaleMultiplier);
                 $("#enableTemplateLayer").prop('checked', enableTemplateLayerChecked);
+				
+				me.updateUrl();
 
             },
             'deactivate': function (event) {
