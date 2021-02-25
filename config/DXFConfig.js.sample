@@ -20,6 +20,8 @@ clientConfig.DXF_MAPSET_CONFIG = [
 			textScaleMultiplier: 0.50,
 			labelScaleMultiplier: 0.50,
 			insertScaleMultiplier: 1,
-			enableTemplateLayerChecked: false
+			enableTemplateLayerChecked: false,
+			enableColorsChecked: false,
+			enableLineThicknessChecked: false
 		}
 	}

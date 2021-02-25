@@ -141,10 +141,14 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 let labelScaleMultiplier = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.labelScaleMultiplier : 1;
                 let insertScaleMultiplier = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.insertScaleMultiplier : 1;
                 let enableTemplateLayerChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableTemplateLayerChecked : true;
+                let enableColorsChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableColorsChecked : true;
+                let enableLineThicknessChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableLineThicknessChecked : true;
                 $("#textScaleMultiplier").val(textScaleMultiplier);
                 $("#labelScaleMultiplier").val(labelScaleMultiplier);
                 $("#insertScaleMultiplier").val(insertScaleMultiplier);
                 $("#enableTemplateLayer").prop('checked', enableTemplateLayerChecked);
+                $("#enableColors").prop('checked', enableColorsChecked);
+                $("#enableLineThickness").prop('checked', enableLineThicknessChecked);
 				
 				me.updateUrl();
 
