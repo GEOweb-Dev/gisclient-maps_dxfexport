@@ -180,7 +180,12 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 		//parametri avanzati
 		params.enableTemplateLayer = document.getElementById('enableTemplateLayer').checked ? 1 : 0;
 		params.enableColors = document.getElementById('enableColors').checked ? 0 : 1;
-		params.enableLineThickness =  document.getElementById('enableLineThickness').checked ? 0 : 1;
+		params.enableLineThickness = document.getElementById('enableLineThickness').checked ? 0 : 1;
+		if(document.getElementById('exportEmptyLayers')){
+			params.exportEmptyLayers = document.getElementById('exportEmptyLayers').checked ? 1 : 0;
+		}else{
+			params.exportEmptyLayers = 0;
+		}
 		var textScaleMultiplier = document.getElementById('textScaleMultiplier');
 		if(textScaleMultiplier.value)
 			params.textScaleMultiplier = textScaleMultiplier.value;

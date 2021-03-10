@@ -22,6 +22,7 @@ clientConfig.DXF_MAPSET_CONFIG = [
 			insertScaleMultiplier: 1,
 			enableTemplateLayerChecked: false,
 			enableColorsChecked: false,
-			enableLineThicknessChecked: false
+			enableLineThicknessChecked: false,
+			exportEmptyLayers: false,
 		}
 	}

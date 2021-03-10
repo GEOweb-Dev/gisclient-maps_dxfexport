@@ -124,6 +124,9 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 $("#enableLineThickness").change(function () {
                     me.updateUrl();
                 });
+				$("#exportEmptyLayers").change(function () {
+                    me.updateUrl();
+                });
                 $("#textScaleMultiplier").change(function () {
                     me.updateUrl();
                 });
@@ -143,12 +146,15 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 let enableTemplateLayerChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableTemplateLayerChecked : true;
                 let enableColorsChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableColorsChecked : true;
                 let enableLineThicknessChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableLineThicknessChecked : true;
-                $("#textScaleMultiplier").val(textScaleMultiplier);
+                let exportEmptyLayersChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.exportEmptyLayersChecked : false;
+				$("#textScaleMultiplier").val(textScaleMultiplier);
                 $("#labelScaleMultiplier").val(labelScaleMultiplier);
                 $("#insertScaleMultiplier").val(insertScaleMultiplier);
                 $("#enableTemplateLayer").prop('checked', enableTemplateLayerChecked);
                 $("#enableColors").prop('checked', enableColorsChecked);
                 $("#enableLineThickness").prop('checked', enableLineThicknessChecked);
+				$("#exportEmptyLayers").prop('checked', exportEmptyLayersChecked);
+				
 				
 				me.updateUrl();
 
