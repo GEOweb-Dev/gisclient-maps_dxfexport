@@ -1,60 +1,108 @@
 <style>
-.dxfInput{
-	color:black;
-}
-.dxfFieldset{
+    .dxfInput {
+        color: black;
+    }
 
-}
-.dxfFieldset legend{
-	font-size:medium;
-	color: white;
-	font-weight: bold;
-}
+    .dxfFieldset {}
+
+    .dxfFieldset legend {
+        font-size: medium;
+        color: white;
+        font-weight: bold;
+    }
+
+    .exportFilter_layer {
+        color: black;
+    }
+
+    .black {
+        color: black;
+    }
+
+    .small-select {
+        padding: 2px 2px !important;
+        font-size: 12px;
+        height: 20px;
+    }
+
+    .bg-eee {
+        background-color: #eee;
+    }
+
+    .p-1 {
+        padding: 5px
+    }
+
+    .mr-1 {
+        margin-right: 5px;
+        display: inline-block;
+    }
 </style>
 <form role="form" onsubmit="event.preventDefault(); return false;">
-    <!-- fieldset cose generali stampa -->
-    <!--<div class="form-group">
-        <label for="export_panel_text">Testo</label>
-        <textarea name="text" class="form-control" id="export_panel_text"></textarea>
-    </div>-->
-    <!--<div class="form-group">
-        <label for="export_panel_date">Data</label>
-        <input type="date" name="date" class="form-control" id="export_panel_date">
-    </div>-->
-    <!-- fieldset proprietà di stampa -->
 
-    <div id="dxfexport_themes_group" class="form-group">
-		<input type="hidden" name="hdnExportDxfUrl" id="hdnExportDxfUrl" />
-		<!-- indicare tutte le coppie di mapset/temi separate da virgola nel campo value -->
-        <label for="export_panel_themes">Temi da esportare</label><br />
+    <div id="tabExport">
+        <ul class="nav nav-tabs">
+            <li id="tabExport_btn_dxf" class="active"><a href="#" id="dxfExportTabButton">DXF</a></li>
+            <li id="tabExport_btn_shp"><a href="#" id="shpExportTabButton">Filtro</a></li>
+        </ul>
     </div>
 
-	<div class="form-group">
-       Area massima esportabile: <span id="exportMaxAreaSize"></span><br />
-	   Area selezionata:  <span id="exportAreaSize"></span>
+    <div id="shpExportPanel" style="display: none" class="p-1">
+        <div class="form-group">
+            <!-- <input type="text" id="nomeLayer" onkeypress="" /> -->
+            <span>Seleziona il livello da estrarre</span>
+            <select id="exportFilter_theme" class="exportFilter_theme form-control">
+            </select><br />
+            <!-- <select id="exportFilter_layer" class="exportFilter_layer  form-control">
+            </select> -->
+            <input id="exportFilter_layer" class="exportFilter_layer form-control" />
+            <div id="exportFilter_container">
+            </div>
+        </div>
     </div>
-	
-	<fieldset class="dxfFieldset">
-		<legend>Impostazioni avanzate</legend>
-			<input type="checkbox" value="1" name="enableTemplateLayer" id="enableTemplateLayer" checked /> <label for="enableTemplateLayer" >Raggruppa layer</label><br/>
-			<input type="checkbox" value="1" name="enableColors" id="enableColors" checked /> <label for="enableColors" >Forza colori DALAYER</label><br/>
-			<input type="checkbox" value="1" name="enableLineThickness" id="enableLineThickness" checked /> <label for="enableLineThickness" >Disabilita larghezza linee</label><br/>
-			<input type="checkbox" value="1" name="exportEmptyLayers" id="exportEmptyLayers" /> <label for="exportEmptyLayers" >Esporta layer vuoti</label><br/>
-			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="textScaleMultiplier" id="textScaleMultiplier" class="dxfInput"/> <label for="textScaleMultiplier" >Molt. alt. testo civici e nomi vie</label><br/>
-			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="labelScaleMultiplier" id="labelScaleMultiplier" class="dxfInput" /> <label for="labelScaleMultiplier" >Molt. alt. testo tubazioni</label><br/>
-			<input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="insertScaleMultiplier" id="insertScaleMultiplier" class="dxfInput" /> <label for="insertScaleMultiplier" >Molt. dimensione simboli</label><br/>
-			
-		</div>
-	</fieldset>
-	
 
-    <div class="form-group">
-	    <a href="#" id="btnExportDxf" role="export" class="btn btn-default" target="_blank">Scarica DXF</a>
-   </div>
+    <div id="dxfExportPanel">
+        <div id="dxfexport_themes_group" class="form-group">
+            <input type="hidden" name="hdnExportDxfUrl" id="hdnExportDxfUrl" />
+            <!-- indicare tutte le coppie di mapset/temi separate da virgola nel campo value -->
+            <label for="export_panel_themes">Temi da esportare</label><br />
+        </div>
 
-    <div class="results" style="display: none;">
-        <span name="result">
-        </span>
+        <div class="form-group">
+            Area massima esportabile: <span id="exportMaxAreaSize"></span><br />
+            Area selezionata: <span id="exportAreaSize"></span>
+        </div>
+
+        <fieldset class="dxfFieldset">
+            <legend>Impostazioni avanzate</legend>
+            <input type="checkbox" value="1" name="enableTemplateLayer" id="enableTemplateLayer" checked /> <label
+                for="enableTemplateLayer">Raggruppa layer</label><br />
+            <input type="checkbox" value="1" name="enableColors" id="enableColors" checked /> <label
+                for="enableColors">Forza colori DALAYER</label><br />
+            <input type="checkbox" value="1" name="enableLineThickness" id="enableLineThickness" checked /> <label
+                for="enableLineThickness">Disabilita larghezza linee</label><br />
+            <input type="checkbox" value="1" name="exportEmptyLayers" id="exportEmptyLayers" /> <label
+                for="exportEmptyLayers">Esporta layer vuoti</label><br />
+            <input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="textScaleMultiplier"
+                id="textScaleMultiplier" class="dxfInput" /> <label for="textScaleMultiplier">Molt. alt. testo
+                civici e
+                nomi vie</label><br />
+            <input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="labelScaleMultiplier"
+                id="labelScaleMultiplier" class="dxfInput" /> <label for="labelScaleMultiplier">Molt. alt. testo
+                tubazioni</label><br />
+            <input type="number" value="" size="2" min="0" max="99" maxlenght="2" name="insertScaleMultiplier"
+                id="insertScaleMultiplier" class="dxfInput" /> <label for="insertScaleMultiplier">Molt. dimensione
+                simboli</label><br />
+        </fieldset>
+
+        <div class="form-group">
+            <a href="#" id="btnExportDxf" role="export" class="btn btn-default" target="_blank">Scarica DXF</a>
+        </div>
+
+        <div class="results" style="display: none;">
+            <span name="result">
+            </span>
+        </div>
     </div>
 
 </form>
