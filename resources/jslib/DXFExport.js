@@ -674,11 +674,11 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         button.click(function () {
             me.downloadDXFSingleLayer();
         });
-        button = jQuery('<button class="btn btn-primary">Esporta Shapefile</button>', {
-        }).appendTo(buttonContainer);
-        button.click(function () {
-            me.downloadSHPSingleLayer();
-        });
+        //button = jQuery('<button class="btn btn-primary">Esporta Shapefile</button>', {
+        //}).appendTo(buttonContainer);
+        //button.click(function () {
+        //    me.downloadSHPSingleLayer();
+        //});
     },
     autocompleteField: function () {
         var fieldId = $("#exportFilterField option:selected").data('fieldid');
