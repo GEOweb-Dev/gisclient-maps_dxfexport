@@ -39,32 +39,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
         eventListeners: {
             'panelready': function (event) {
                 var me = this, timerid;
-                var themeList = []; //contiene gli elementi che genereranno gli input
-                for (var i = 0; i < this.map.config.layers.length; i++) {
-                    var cfgLayer = this.map.config.layers[i];
-                    if (cfgLayer.typeId == 4 || cfgLayer.typeId == 5 || cfgLayer.typeId == 7 || cfgLayer.typeId == 8)
-                        continue;
-                    if (typeof (cfgLayer.options) !== 'undefined') {
-                        var layerOpts = cfgLayer.options;
-                    }
-                    else {
-                        var layerOpts = cfgLayer.parameters;
-                    }
-                    var theme = $.grep(themeList, function (e) { return e.themeLabel == layerOpts.theme });
-                    if (theme.length == 0) {
-                        var theme = {};
-                        theme.themeLabel = layerOpts.theme;
-                        theme.themeIds = [];
-                        theme.themeIds.push(layerOpts.theme_id);
-                        theme.mapsetName = this.map.config.mapsetName;
-                        themeList.push(theme);
-                    } else {
-                        theme = theme[0];
-                        if (!theme.themeIds.includes(layerOpts.theme_id)) {
-                            theme.themeIds.push(layerOpts.theme_id);
-                        }
-                    }
-                }
+                var themeList = me.getThemesToExport();
                 var container = $('#dxfexport_themes_group');
                 var inputs = container.find('input');
                 var id = inputs.length + 1;
@@ -74,7 +49,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                         type: 'checkbox',
                         id: 'dxfexport_theme_' + id,
                         class: 'dxfexport_themes',
-                        value: theme.mapsetName + ',' + element.themeIds.join(',')
+                        value: element.mapsetName + ',' + element.themeIds.join(',')
                     }).appendTo(container);
                     if ($.inArray(element.themeLabel.toLowerCase(), clientConfig.DXF_THEME_SELECTED) > -1) {
                         atLeastOneCheck = true;
@@ -102,12 +77,12 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                     event.preventDefault();
                     //$('#'+me.formId+' a[role="pdf"], #exportpanel a[role="html"]').attr('href', '#');
                     //$('#'+me.formId+' span[role="icon"]').removeClass('glyphicon-white').addClass('glyphicon-disabled');
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 $("#map-select-scale").on('change', function (event) {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
-                
+
                 $('#btnExportDxf').on('click', function (event) {
                     event.preventDefault();
                     me.downloadDXF();
@@ -116,25 +91,25 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
 
                 //eventi per le opzioni avanzate
                 $("#enableTemplateLayer").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 $("#enableColors").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 $("#enableLineThickness").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
-				$("#exportEmptyLayers").change(function () {
-                    me.updateUrl();
+                $("#exportEmptyLayers").change(function () {
+                    me.updateUrlDownloadDxf();
                 });
                 $("#textScaleMultiplier").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 $("#labelScaleMultiplier").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 $("#insertScaleMultiplier").change(function () {
-                    me.updateUrl();
+                    me.updateUrlDownloadDxf();
                 });
                 var mapSetDxfConfig = clientConfig.DXF_MAPSET_CONFIG.filter(function (element) {
                     return element.mapset === GisClientMap.mapsetName;
@@ -147,16 +122,49 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 let enableColorsChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableColorsChecked : true;
                 let enableLineThicknessChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.enableLineThicknessChecked : true;
                 let exportEmptyLayersChecked = mapSetDxfConfig.length ? mapSetDxfConfig[0].config.exportEmptyLayersChecked : false;
-				$("#textScaleMultiplier").val(textScaleMultiplier);
+                $("#textScaleMultiplier").val(textScaleMultiplier);
                 $("#labelScaleMultiplier").val(labelScaleMultiplier);
                 $("#insertScaleMultiplier").val(insertScaleMultiplier);
                 $("#enableTemplateLayer").prop('checked', enableTemplateLayerChecked);
                 $("#enableColors").prop('checked', enableColorsChecked);
                 $("#enableLineThickness").prop('checked', enableLineThicknessChecked);
-				$("#exportEmptyLayers").prop('checked', exportEmptyLayersChecked);
-				
-				
-				me.updateUrl();
+                $("#exportEmptyLayers").prop('checked', exportEmptyLayersChecked);
+
+                //sezione panello di ricerca
+                $('#dxfExportTabButton').on('click', function (event) {
+                    event.preventDefault();
+                    $('#dxfExportPanel').show();
+                    $('#tabExport_btn_dxf').addClass('active');
+                    $('#shpExportPanel').hide();
+                    $('#tabExport_btn_shp').removeClass('active');
+                    return false;
+                });
+                $('#shpExportTabButton').on('click', function (event) {
+                    event.preventDefault();
+                    $('#dxfExportPanel').hide();
+                    $('#tabExport_btn_dxf').removeClass('active');
+                    $('#shpExportPanel').show();
+                    $('#tabExport_btn_shp').addClass('active');
+                    return false;
+                });
+
+                me.loadExportFilterSelectTheme(themeList);
+
+                $('#exportFilter_theme').val("__select__");
+                $('#exportFilter_theme').change(function () {
+                    var selectedTheme = $(this).val()
+                    me.loadExportFilterSelectLayer(selectedTheme);
+
+                });
+                $('#exportFilter_layer').change(function () {
+                    var selectedFeatureType = $(this).val()
+                    if (selectedFeatureType == "__select__") {
+                        return;
+                    }
+                    me.renderExportFilter(selectedFeatureType);
+                });
+
+                me.updateUrlDownloadDxf();
 
             },
             'deactivate': function (event) {
