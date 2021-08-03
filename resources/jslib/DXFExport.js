@@ -210,7 +210,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         params.layers = $('#exportFilter_layer').val();
         params.attributeFilters = JSON.stringify(this.exportFilter);
         params.mapset = GisClientMap.mapsetName;
-        params.epsg = 3857;//clientConfig.DXF_EPSG;
+        params.epsg = 25832;//clientConfig.DXF_EPSG;
         params.template = clientConfig.DXF_TEMPLATE;
 
         //parametri avanzati
