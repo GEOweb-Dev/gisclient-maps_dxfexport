@@ -48,13 +48,11 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         //controllo per nascondere il bottone
         map.events.register('zoomend', null, function () {
             var zoom = map.getZoom();
-            if (!sidebarPanel.isOpened) {
-                if (zoom >= 1) {
-                    $("a[title=\"Esporta DXF\"]").css("display", "block");
+            if (zoom >= 1) {
+                $("a[title=\"Esporta DXF\"]").css("display", "block");
 
-                } else {
-                    $("a[title=\"Esporta DXF\"]").css("display", "none");
-                }
+            } else {
+                $("a[title=\"Esporta DXF\"]").css("display", "none");
             }
         });
     },
