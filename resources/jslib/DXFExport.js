@@ -500,8 +500,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
                         optionsValues.push(optionValue);
                     }
                 }
-
-
             }
         }
 
@@ -612,6 +610,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             '<option value="lessthan">Minore</option>' +
             '<option value="greaterthan">Maggiore</option>' +
             '<option value="in">In</option>' +
+            '<option value="in2">In (grandi dati)</option>' +
             '</select></td></tr>', {
             "class": ''
         }).appendTo(tableContainer);
