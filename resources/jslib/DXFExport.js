@@ -547,6 +547,18 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             alert("Selezionare un valore");
             return;
         }
+        debugger
+        if (operator === "in2" && this.exportFilter.filters.length > 0) {
+            alert("L'operatore in(1000+) deve essere l'unico filtro per essere applicato. Eliminare gli altri filtri impostati per poter procedere.");
+            return;
+        }
+
+        if (operator !== "in2" && this.exportFilter.filters.filter(function (element) {
+            return element.operator === "in2";
+        }).length) {
+            alert("L'operatore in(1000+) non può essere combinato con altri filtri.");
+            return;
+        }
         this.exportFilter.logic = logic;
         this.exportFilter.filters.push({
             field: field, operator: operator, value: value, operatorLabel: operatorLabel
@@ -610,7 +622,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             '<option value="lessthan">Minore</option>' +
             '<option value="greaterthan">Maggiore</option>' +
             '<option value="in">In</option>' +
-            '<option value="in2">In (grandi dati)</option>' +
+            '<option value="in2">In (1000+)</option>' +
             '</select></td></tr>', {
             "class": ''
         }).appendTo(tableContainer);
