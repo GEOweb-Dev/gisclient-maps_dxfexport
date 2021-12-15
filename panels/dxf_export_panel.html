@@ -43,7 +43,8 @@
     <div id="tabExport">
         <ul class="nav nav-tabs">
             <li id="tabExport_btn_dxf" class="active"><a href="#" id="dxfExportTabButton">DXF</a></li>
-            <li id="tabExport_btn_shp"><a href="#" id="shpExportTabButton">Filtro</a></li>
+            <li id="tabExport_btn_shp"><a href="#" id="shpExportTabButton">Attributi</a></li>
+            <li id="tabExport_btn_processing"><a href="#" id="fieldExportTabButton">Elaborazioni</a></li>
         </ul>
     </div>
 
@@ -58,6 +59,18 @@
             <input id="exportFilter_layer" class="exportFilter_layer form-control" />
             <div id="exportFilter_container">
             </div>
+        </div>
+    </div>
+
+    <div id="processingDxfExportPanel" style="display: none" class="p-1">
+        <div class="form-group">
+            <span>Seleziona l'elaborazione</span>
+            <select id="processingDxfName" class="exportFilter_theme form-control">
+            </select><br />
+            <input id="processingDxf_field" class="exportFilter_layer form-control" />
+        </div>
+        <div class="form-group">
+            <a href="#" id="btnProcessingDxf" role="export" class="btn btn-default" target="_blank">Scarica DXF</a>
         </div>
     </div>
 

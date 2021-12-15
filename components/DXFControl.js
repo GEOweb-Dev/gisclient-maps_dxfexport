@@ -137,6 +137,9 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                     $('#tabExport_btn_dxf').addClass('active');
                     $('#shpExportPanel').hide();
                     $('#tabExport_btn_shp').removeClass('active');
+                    $('#processingDxfExportPanel').hide();
+                    $('#tabExport_btn_processing').removeClass('active');
+                    tabExport_btn_field
                     return false;
                 });
                 $('#shpExportTabButton').on('click', function (event) {
@@ -145,11 +148,23 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                     $('#tabExport_btn_dxf').removeClass('active');
                     $('#shpExportPanel').show();
                     $('#tabExport_btn_shp').addClass('active');
+                    $('#processingDxfExportPanel').hide();
+                    $('#tabExport_btn_processing').removeClass('active');
+                    return false;
+                });
+                $('#fieldExportTabButton').on('click', function (event) {
+                    event.preventDefault();
+                    $('#dxfExportPanel').hide();
+                    $('#tabExport_btn_dxf').removeClass('active');
+                    $('#shpExportPanel').hide();
+                    $('#tabExport_btn_shp').removeClass('active');
+                    $('#processingDxfExportPanel').show();
+                    $('#tabExport_btn_processing').addClass('active');
                     return false;
                 });
 
+                //caricamento della sezione del filtro per attributi
                 me.loadExportFilterSelectTheme(themeList);
-
                 $('#exportFilter_theme').val("__select__");
                 $('#exportFilter_theme').change(function () {
                     var selectedTheme = $(this).val()
@@ -164,6 +179,11 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                     me.renderExportFilter(selectedFeatureType);
                 });
 
+                //caricamento della sezione elaborazioni speciali
+                //load della tendina
+                me.loadProcessingFilterSelectLayer();
+
+                //Aggiornamento iniziale degli url
                 me.updateUrlDownloadDxf();
 
             },
