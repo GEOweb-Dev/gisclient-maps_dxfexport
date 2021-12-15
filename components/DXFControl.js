@@ -234,11 +234,12 @@ window.GCComponents["SideToolbar.Buttons"].addButton(
                 ctrlDXFExport.activate();
                 this.activate();
                 var panelPath = GisClientMap.rootPath + 'plugins/gisclient-maps_dxfexport/panels/';
+				var rnd = Math.floor((Math.random() * 100000) + 1); //rimozione manuale della cache
                 if ($.mobile) {
-                    panelPath += 'dxf_export_panel_mobile.html?1';
+                    panelPath += 'dxf_export_panel_mobile.html?' + rnd;
                 }
                 else {
-                    panelPath += 'dxf_export_panel.html?1';
+                    panelPath += 'dxf_export_panel.html?' + rnd;
                 }
                 if ($.trim($('#dxfexportpanel').html()) == '') {
                     $("#dxfexportpanel").load(panelPath, function () {
