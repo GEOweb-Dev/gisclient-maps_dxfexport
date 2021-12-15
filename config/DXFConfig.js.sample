@@ -26,3 +26,23 @@ clientConfig.DXF_MAPSET_CONFIG = [
 			exportEmptyLayers: false,
 		}
 	}
+//Elenco dei filtri speciali per il DXF basati sul valore di un campo
+//il campo fieldType può avere valori s/i
+clientConfig.DXF_PROCESSING_CONFIG = [
+	{
+		processingId:"",
+		processingName:"",
+		themes: [],
+		field:"",
+		fieldType:"",
+		value:"",
+		tables:[
+			{
+				tableName:"",
+				tableNameSql:"",
+				sqlAdditionalFilter:"",
+				geometryField:""
+			}
+		]
+	}
+]

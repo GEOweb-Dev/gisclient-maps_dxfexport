@@ -91,10 +91,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         return params;
     },
 
-
-
     boxModify: function (e) {
-
         var bounds = e.feature.geometry.getBounds();
         //calcoli in metri. Sul sistema 3857 sarebbe da rivedere
         //devo limitare l'area di definizione
@@ -127,6 +124,27 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         $("#exportAreaSize").html(Math.round(area) + " mq");
         this.events.triggerEvent("updateboxInfo");
     },
+    addAdvancedParameters: function (params) {
+        //parametri avanzati
+        params.enableTemplateLayer = document.getElementById('enableTemplateLayer').checked ? 1 : 0;
+        params.enableColors = document.getElementById('enableColors').checked ? 0 : 1;
+        params.enableLineThickness = document.getElementById('enableLineThickness').checked ? 0 : 1;
+        if (document.getElementById('exportEmptyLayers')) {
+            params.exportEmptyLayers = document.getElementById('exportEmptyLayers').checked ? 1 : 0;
+        } else {
+            params.exportEmptyLayers = 0;
+        }
+        var textScaleMultiplier = document.getElementById('textScaleMultiplier');
+        if (textScaleMultiplier.value)
+            params.textScaleMultiplier = textScaleMultiplier.value;
+        var labelScaleMultiplier = document.getElementById('labelScaleMultiplier');
+        if (labelScaleMultiplier.value)
+            params.labelScaleMultiplier = labelScaleMultiplier.value;
+        var insertScaleMultiplier = document.getElementById('insertScaleMultiplier');
+        if (insertScaleMultiplier.value)
+            params.insertScaleMultiplier = insertScaleMultiplier.value;
+        return params;
+    },
 
     updateUrlDownloadDxf: function () {
         var me = this;
@@ -142,9 +160,10 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         var center = bounds.getCenterLonLat();
         var width = bounds.getWidth();
         var height = bounds.getHeight();
-        params["center"] = [center.lon, center.lat];
-        params["extent"] = [center.lon - width / 2, center.lat - height / 2, center.lon + width / 2, center.lat + height / 2].join(",");
+        //params["center"] = [center.lon, center.lat];
+        //params["extent"] = [center.lon - width / 2, center.lat - height / 2, center.lon + width / 2, center.lat + height / 2].join(",");
         params = {};
+        params.filterType = 1;
         params.project = GisClientMap.projectName;
         var mapSetThemes = $('.dxfexport_themes:checked').map(function () { return this.value; }).get().join(';');
         if (!mapSetThemes) {
@@ -174,24 +193,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         params.minx = center.lon - width / 2;
         params.maxx = center.lon + width / 2;
 
-        //parametri avanzati
-        params.enableTemplateLayer = document.getElementById('enableTemplateLayer').checked ? 1 : 0;
-        params.enableColors = document.getElementById('enableColors').checked ? 0 : 1;
-        params.enableLineThickness = document.getElementById('enableLineThickness').checked ? 0 : 1;
-        if (document.getElementById('exportEmptyLayers')) {
-            params.exportEmptyLayers = document.getElementById('exportEmptyLayers').checked ? 1 : 0;
-        } else {
-            params.exportEmptyLayers = 0;
-        }
-        var textScaleMultiplier = document.getElementById('textScaleMultiplier');
-        if (textScaleMultiplier.value)
-            params.textScaleMultiplier = textScaleMultiplier.value;
-        var labelScaleMultiplier = document.getElementById('labelScaleMultiplier');
-        if (labelScaleMultiplier.value)
-            params.labelScaleMultiplier = labelScaleMultiplier.value;
-        var insertScaleMultiplier = document.getElementById('insertScaleMultiplier');
-        if (insertScaleMultiplier.value)
-            params.insertScaleMultiplier = insertScaleMultiplier.value;
+        params = me.addAdvancedParameters(params);
 
         //Aggiorno il link per il download
         var url = clientConfig.DXF_SERVICE_URL + 'services/plugins/dxfexport/gcExportService.php?' + $.param(params);
@@ -203,6 +205,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         var params = {};
 
         //setto i parametri
+        params.filterType = 2;
         params.project = GisClientMap.projectName;
         params.themes = $('#exportFilter_theme').val();
         params.layers = $('#exportFilter_layer').val();
@@ -211,25 +214,49 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         params.epsg = 25832;//clientConfig.DXF_EPSG;
         params.template = clientConfig.DXF_TEMPLATE;
 
-        //parametri avanzati
-        params.enableTemplateLayer = document.getElementById('enableTemplateLayer').checked ? 1 : 0;
-        params.enableColors = document.getElementById('enableColors').checked ? 0 : 1;
-        params.enableLineThickness = document.getElementById('enableLineThickness').checked ? 0 : 1;
-        if (document.getElementById('exportEmptyLayers')) {
-            params.exportEmptyLayers = document.getElementById('exportEmptyLayers').checked ? 1 : 0;
-        } else {
-            params.exportEmptyLayers = 0;
-        }
-        var textScaleMultiplier = document.getElementById('textScaleMultiplier');
-        if (textScaleMultiplier.value)
-            params.textScaleMultiplier = textScaleMultiplier.value;
-        var labelScaleMultiplier = document.getElementById('labelScaleMultiplier');
-        if (labelScaleMultiplier.value)
-            params.labelScaleMultiplier = labelScaleMultiplier.value;
-        var insertScaleMultiplier = document.getElementById('insertScaleMultiplier');
-        if (insertScaleMultiplier.value)
-            params.insertScaleMultiplier = insertScaleMultiplier.value;
+        params = me.addAdvancedParameters(params);
 
+        //Aggiorno il link per il download
+        var url = clientConfig.DXF_SERVICE_URL + 'services/plugins/dxfexport/gcExportService.php?' + $.param(params);
+        return url;
+    },
+    updateUrlDownloadDxfProcessing: function () {
+        var me = this;
+        var processingFilter = clientConfig.DXF_PROCESSING_CONFIG.filter(function (element) {
+            return element.processingId = $("#processingDxfName").val();
+        })[0];
+        processingFilter.value = $("#processingDxf_field").val();
+        var params = {};
+        //setto i parametri
+        params.filterType = 3;
+        params.project = GisClientMap.projectName;
+        
+        var mapSetThemes = $('.dxfexport_themes:checked').map(function () { return this.value; }).get().join(';');
+        if (!mapSetThemes) {
+            alert("Selezionare almeno un tema.");
+            //seleziono il primo tema
+            $('.dxfexport_themes').first().prop('checked', true);
+            return;
+        }
+        //ricavo i temi/mapset
+        var mapSetThemes = mapSetThemes.split(';');
+        var themes = new Array();
+        var mapSet = new Array();
+        for (var i = 0; i < mapSetThemes.length; i++) {
+            var mapSetTheme = mapSetThemes[i].split(',');
+            mapSet.push(mapSetTheme[0]);
+            for (var k = 1; k < mapSetTheme.length; k++) {
+                themes.push(mapSetTheme[k]);
+            }
+        }
+        //setto i parametri
+        params.themes = themes.join();
+        params.mapset = mapSet.join();
+
+        params.epsg = 25832;//clientConfig.DXF_EPSG;
+        params.template = clientConfig.DXF_TEMPLATE;
+        params.processingFilter = JSON.stringify(processingFilter);
+        params = me.addAdvancedParameters(params);
         //Aggiorno il link per il download
         var url = clientConfig.DXF_SERVICE_URL + 'services/plugins/dxfexport/gcExportService.php?' + $.param(params);
         return url;
@@ -427,6 +454,28 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             alert("Si è verificato un errore nell'estrazione dei dati. Si consiglia di limitare i temi estratti o ridurre l'area di selezione. Se il problema persiste contattare gli amministratori.");
         });
     },
+    downloadDXFProcessing: function () {
+        var me = this;
+        if (me.loadingControl) me.loadingControl.maximizeControl();
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: this.updateUrlDownloadDxfProcessing(),
+            headers: {
+                Accept: 'application/json',
+            }
+        }).done(function (res) {
+            if (me.loadingControl) me.loadingControl.minimizeControl();
+            const a = document.createElement('a');
+            a.style = 'display: none';
+            document.body.appendChild(a);
+            a.href = clientConfig.DXF_DOWNLOAD_URL + res.fileName;
+            a.download = res.fileName;
+            a.click();
+        }).fail(function (err) {
+            alert("Si è verificato un errore nell'estrazione dei dati. Si consiglia di limitare i temi estratti o ridurre l'area di selezione. Se il problema persiste contattare gli amministratori.");
+        });
+    },
     getThemesToExport: function () {
         var themeList = []; //contiene gli elementi che genereranno gli input
         for (var i = 0; i < this.map.config.layers.length; i++) {
@@ -547,7 +596,6 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             alert("Selezionare un valore");
             return;
         }
-        debugger
         if (operator === "in2" && this.exportFilter.filters.length > 0) {
             alert("L'operatore in(1000+) deve essere l'unico filtro per essere applicato. Eliminare gli altri filtri impostati per poter procedere.");
             return;
@@ -689,6 +737,51 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         //    me.downloadSHPSingleLayer();
         //});
     },
+    //sezione filtro per campo
+    loadProcessingFilterSelectLayer: function () {
+        let me = this;
+        $('#processingDxfName')
+            .find('option')
+            .remove()
+            .end();
+        //aggiungo la tendina con i filtri disponibili
+        for (let index = 0; index < clientConfig.DXF_PROCESSING_CONFIG.length; index++) {
+            const filter = clientConfig.DXF_PROCESSING_CONFIG[index];
+            $('#processingDxfName').append($('<option>', {
+                value: filter.processingId,
+                text: filter.processingName
+            }));
+        }
+
+        $('#processingDxfName').change(function () {
+            var processingId = $('#processingDxfName').val()
+            if (processingId == "__select__") {
+                return;
+            }
+            let filters =clientConfig.DXF_PROCESSING_CONFIG.filter(function(element){
+                    return element.processingId == processingId;
+
+            });
+            me.autocompleteInput("#processingDxf_field", filters[0].fieldSearchId);
+        });
+
+        //TO DO da abilitare la definizione dinamica in base all'evento change della select
+        if(clientConfig.DXF_PROCESSING_CONFIG[0].fieldSearchId){
+            me.autocompleteInput("#processingDxf_field", clientConfig.DXF_PROCESSING_CONFIG[0].fieldSearchId);
+        }
+        
+        $("#btnProcessingDxf").click(function () {
+
+            if(!$('#processingDxf_field').val()){
+                alert("Selezionare un valore")
+                return false;
+            }
+            me.downloadDXFProcessing();
+            return false;
+        });
+        
+    },
+
     autocompleteField: function () {
         var fieldId = $("#exportFilterField option:selected").data('fieldid');
         // $("#exportFilterValue").select2({
@@ -714,6 +807,31 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         //         });
         //     }
         // });
+    },
+    autocompleteInput: function (id, fieldId) {
+        $(id).select2({
+            minimumInputLength: 0,
+            query: function (query) {
+                $.ajax({
+                    url: GisClientMap.baseUrl + 'services/xSuggest.php',
+                    data: {
+                        suggest: query.term,
+                        field_id: fieldId
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        var results = [];
+                        $.each(data.data, function (e, val) {
+                            results.push({
+                                id: val.value,
+                                text: val.value
+                            });
+                        });
+                        query.callback({ results: results });
+                    }
+                });
+            }
+        });
     }
 
     // toggleExportUI: function (uiMode) {
