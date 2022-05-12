@@ -223,7 +223,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
     updateUrlDownloadDxfProcessing: function () {
         var me = this;
         var processingFilter = clientConfig.DXF_PROCESSING_CONFIG.filter(function (element) {
-            return element.processingId = $("#processingDxfName").val();
+            return element.processingId == $("#processingDxfName").val();
         })[0];
         processingFilter.value = $("#processingDxf_field").val();
         var params = {};
@@ -252,9 +252,9 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         //setto i parametri
         params.themes = themes.join();
         params.mapset = mapSet.join();
-
         params.epsg = 25832;//clientConfig.DXF_EPSG;
         params.template = clientConfig.DXF_TEMPLATE;
+        
         params.processingFilter = JSON.stringify(processingFilter);
         params = me.addAdvancedParameters(params);
         //Aggiorno il link per il download
@@ -731,11 +731,11 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         button.click(function () {
             me.downloadDXFSingleLayer();
         });
-        //button = jQuery('<button class="btn btn-primary">Esporta Shapefile</button>', {
-        //}).appendTo(buttonContainer);
-        //button.click(function () {
-        //    me.downloadSHPSingleLayer();
-        //});
+        button = jQuery('<button class="btn btn-primary">Esporta Shapefile</button>', {
+        }).appendTo(buttonContainer);
+        button.click(function () {
+            me.downloadSHPSingleLayer();
+        });
     },
     //sezione filtro per campo
     loadProcessingFilterSelectLayer: function () {
@@ -745,8 +745,13 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             .remove()
             .end();
         //aggiungo la tendina con i filtri disponibili
-        for (let index = 0; index < clientConfig.DXF_PROCESSING_CONFIG.length; index++) {
-            const filter = clientConfig.DXF_PROCESSING_CONFIG[index];
+
+        var processingConfigItems = clientConfig.DXF_PROCESSING_CONFIG.filter(function (element) {
+            return element.mapsets.includes(GisClientMap.mapsetName);
+        });
+
+        for (let index = 0; index < processingConfigItems.length; index++) {
+            const filter = processingConfigItems[index];
             $('#processingDxfName').append($('<option>', {
                 value: filter.processingId,
                 text: filter.processingName
@@ -767,7 +772,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
 
         //TO DO da abilitare la definizione dinamica in base all'evento change della select
         if(clientConfig.DXF_PROCESSING_CONFIG[0].fieldSearchId){
-            me.autocompleteInput("#processingDxf_field", clientConfig.DXF_PROCESSING_CONFIG[0].fieldSearchId);
+            me.autocompleteInput("#processingDxf_field", processingConfigItems[0].fieldSearchId);
         }
         
         $("#btnProcessingDxf").click(function () {
