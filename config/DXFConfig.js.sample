@@ -39,6 +39,7 @@ clientConfig.DXF_PROCESSING_CONFIG = [
 		tables:[
 			{
 				tableName:"",
+				fieldSql:"",
 				tableNameSql:"",
 				sqlAdditionalFilter:"",
 				geometryField:""
