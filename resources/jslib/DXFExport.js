@@ -731,11 +731,13 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         button.click(function () {
             me.downloadDXFSingleLayer();
         });
-        button = jQuery('<button class="btn btn-primary">Esporta Shapefile</button>', {
-        }).appendTo(buttonContainer);
-        button.click(function () {
-            me.downloadSHPSingleLayer();
-        });
+        if(clientConfig.DXF_USER_CONFIG.hasGeowebShp) {
+            button = jQuery('<button class="btn btn-primary" id="btnEsportaShapeFile">Esporta Shapefile</button>', {
+            }).appendTo(buttonContainer);
+            button.click(function () {
+                me.downloadSHPSingleLayer();
+            });
+        }
     },
     //sezione filtro per campo
     loadProcessingFilterSelectLayer: function () {

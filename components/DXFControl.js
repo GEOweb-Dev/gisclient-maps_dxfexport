@@ -44,6 +44,24 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                 var inputs = container.find('input');
                 var id = inputs.length + 1;
                 var atLeastOneCheck = false;
+                var retValue = {result: 'ok'};
+                //scarico le funzioni di sistema
+                $.ajax({
+                    url: clientConfig.DXF_SERVICE_URL + 'services/plugins/dxfexport/dxfUserConfig.php?',
+                    method: 'GET',
+                    dataType: 'json',
+                    data: params,
+                    success: function(response) {
+                        clientConfig.DXF_USER_CONFIG = response;
+                        return retValue;
+                    },
+                    error: function() {
+                        letretValue.result = 'error';
+                        retValue.message = 'Errore di sistema';
+                        return retValue;
+                    }
+                });
+
                 themeList.forEach(function (element) {
                     $('<input />', {
                         type: 'checkbox',
