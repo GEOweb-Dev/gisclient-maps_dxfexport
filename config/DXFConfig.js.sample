@@ -17,6 +17,7 @@ clientConfig.DXF_MAPSET_CONFIG = [
 	{
 		mapset:"mappa_teleriscaldamento",
 		config: {
+			hideDxfPlugin: true, //rimuove la visualizzazione del pluigin
 			textScaleMultiplier: 0.50,
 			labelScaleMultiplier: 0.50,
 			insertScaleMultiplier: 1,

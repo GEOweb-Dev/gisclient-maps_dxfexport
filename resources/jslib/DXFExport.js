@@ -45,10 +45,19 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             this.layerbox.events.register('featuremodified', this, this.boxModify);
         }
 
+        let mapSetDxfConfig = clientConfig.DXF_MAPSET_CONFIG.filter(function (element) {
+            return element.mapset === GisClientMap.mapsetName;
+        });
+        let toolIsVisible = true;
+        //controllo se è impostato il blocco forzato del plugin
+        if(mapSetDxfConfig.length){
+            toolIsVisible = !mapSetDxfConfig[0].config.hideDxfPlugin;
+        }
+
         //controllo per nascondere il bottone
         map.events.register('zoomend', null, function () {
             var zoom = map.getZoom();
-            if (zoom >= 1) {
+            if (zoom >= 1 && toolIsVisible) {
                 $("a[title=\"Esporta DXF\"]").css("display", "block");
 
             } else {
