@@ -54,10 +54,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
         if(mapSetDxfConfig.length){
             toolIsVisible = !mapSetDxfConfig[0].config.hideDxfPlugin;
         }
-        //visualizzazione di default
-        if(!toolIsVisible){
-            $("a[title=\"Esporta DXF\"]").css("display", "none");
-        }
+       
         //controllo per nascondere il bottone
         map.events.register('zoomend', null, function () {
             var zoom = map.getZoom();

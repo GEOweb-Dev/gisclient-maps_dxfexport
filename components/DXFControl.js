@@ -234,45 +234,58 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
     });
 });
 
-// **** Toolbar button
-window.GCComponents["SideToolbar.Buttons"].addButton(
-    'button-dxfexport',
-    'Esporta DXF',
-    'glyphicon-white glyphicon-export',
-    function () {
-        if (sidebarPanel.handleEvent || typeof (sidebarPanel.handleEvent) === 'undefined') {
-            var ctrlDXFExport = this.map.getControlsBy('gc_id', 'control-dxfexport')[0];
 
-            if (ctrlDXFExport.active) {
-                ctrlDXFExport.deactivate();
-                this.deactivate();
-                sidebarPanel.hide('dxfexportpanel');
-            }
-            else {
-                ctrlDXFExport.activate();
-                this.activate();
-                var panelPath = GisClientMap.rootPath + 'plugins/gisclient-maps_dxfexport/panels/';
-				var rnd = Math.floor((Math.random() * 100000) + 1); //rimozione manuale della cache
-                if ($.mobile) {
-                    panelPath += 'dxf_export_panel_mobile.html?' + rnd;
+let mapSetDxfConfig = clientConfig.DXF_MAPSET_CONFIG.filter(function (element) {
+    return element.mapset === GisClientMap.mapsetName;
+});
+
+let dxfToolIsVisible = true;
+//controllo se è impostato il blocco forzato del plugin
+if(mapSetDxfConfig.length){
+    dxfToolIsVisible = !mapSetDxfConfig[0].config.hideDxfPlugin;
+}
+//visualizzazione di default
+if(dxfToolIsVisible){
+    // **** Toolbar button
+    window.GCComponents["SideToolbar.Buttons"].addButton(
+        'button-dxfexport',
+        'Esporta DXF',
+        'glyphicon-white glyphicon-export',
+        function () {
+            if (sidebarPanel.handleEvent || typeof (sidebarPanel.handleEvent) === 'undefined') {
+                var ctrlDXFExport = this.map.getControlsBy('gc_id', 'control-dxfexport')[0];
+
+                if (ctrlDXFExport.active) {
+                    ctrlDXFExport.deactivate();
+                    this.deactivate();
+                    sidebarPanel.hide('dxfexportpanel');
                 }
                 else {
-                    panelPath += 'dxf_export_panel.html?' + rnd;
-                }
-                if ($.trim($('#dxfexportpanel').html()) == '') {
-                    $("#dxfexportpanel").load(panelPath, function () {
-                        ctrlDXFExport.events.triggerEvent('panelready');
-                    });
-                }
-                else {
-                    //this.drawPrintArea();
-                }
+                    ctrlDXFExport.activate();
+                    this.activate();
+                    var panelPath = GisClientMap.rootPath + 'plugins/gisclient-maps_dxfexport/panels/';
+                    var rnd = Math.floor((Math.random() * 100000) + 1); //rimozione manuale della cache
+                    if ($.mobile) {
+                        panelPath += 'dxf_export_panel_mobile.html?' + rnd;
+                    }
+                    else {
+                        panelPath += 'dxf_export_panel.html?' + rnd;
+                    }
+                    if ($.trim($('#dxfexportpanel').html()) == '') {
+                        $("#dxfexportpanel").load(panelPath, function () {
+                            ctrlDXFExport.events.triggerEvent('panelready');
+                        });
+                    }
+                    else {
+                        //this.drawPrintArea();
+                    }
 
-                sidebarPanel.show('dxfexportpanel');
+                    sidebarPanel.show('dxfexportpanel');
+                }
+                if (typeof (sidebarPanel.handleEvent) !== 'undefined')
+                    sidebarPanel.handleEvent = false;
             }
-            if (typeof (sidebarPanel.handleEvent) !== 'undefined')
-                sidebarPanel.handleEvent = false;
-        }
-    },
-    { button_group: 'print', sidebar_panel: 'dxfexportpanel', gc_control: 'control-dxfexport' }
-);
+        },
+        { button_group: 'print', sidebar_panel: 'dxfexportpanel', gc_control: 'control-dxfexport' }
+    );
+}
