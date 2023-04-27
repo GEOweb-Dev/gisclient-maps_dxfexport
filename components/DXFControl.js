@@ -73,7 +73,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                         atLeastOneCheck = true;
                         $('#' + 'dxfexport_theme_' + id).prop('checked', true)
                     }
-                    $('<label />', { 'for': 'dxfexport_theme_' + id, text: element.themeLabel }).appendTo(container);
+                    $('<label />', { 'for': 'dxfexport_theme_' + id, text: element.theme_orig }).appendTo(container);
                     if ($.mobile) {
                         $('#dxfexport_theme_' + id).checkboxradio();
                     }

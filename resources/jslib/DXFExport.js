@@ -502,6 +502,7 @@ OpenLayers.Control.DXFExport = OpenLayers.Class(OpenLayers.Control, {
             if (theme.length == 0) {
                 var theme = {};
                 theme.themeLabel = layerOpts.theme;
+				theme.theme_orig = layerOpts.theme_orig;						  
                 theme.themeIds = [];
                 theme.themeIds.push(layerOpts.theme_id);
                 theme.mapsetName = this.map.config.mapsetName;
