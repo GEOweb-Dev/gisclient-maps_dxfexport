@@ -69,7 +69,7 @@ window.GCComponents["Controls"].addControl('control-dxfexport', function (map) {
                         class: 'dxfexport_themes',
                         value: element.mapsetName + ',' + element.themeIds.join(',')
                     }).appendTo(container);
-                    if ($.inArray(element.themeLabel.toLowerCase(), clientConfig.DXF_THEME_SELECTED) > -1) {
+                    if ($.inArray(element.theme_orig.toLowerCase(), clientConfig.DXF_THEME_SELECTED) > -1) {
                         atLeastOneCheck = true;
                         $('#' + 'dxfexport_theme_' + id).prop('checked', true)
                     }
